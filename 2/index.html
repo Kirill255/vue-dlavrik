@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
+    <link href="style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col col-sm-6">
+
+                    <!-- radio button -->
+                    <div class="alert" :class="divClassName">
+                        {{divClass}}
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="exampleRadios1" value="info" v-model="divClass">
+                        <label class="form-check-label" for="exampleRadios1">
+                            Info
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" id="exampleRadios2" value="warning" v-model="divClass">
+                        <label class="form-check-label" for="exampleRadios2">
+                            Warning
+                        </label>
+                    </div>
+                    <hr>
+
+                    <!-- ========================================= -->
+                    <!-- checkbox -->
+                    <div class="form-check" v-for="(value, key, i) in checkboxFlags">
+                        <input class="form-check-input" type="checkbox" :id="'defaultCheck' + i" v-model="checkboxFlags[key]">
+                        <label class="form-check-label" :for="'defaultCheck' + i">
+                            {{ key }}
+                        </label>
+                    </div>
+
+                    <table class="table" :class="checkboxFlags">
+                        <tr>
+                            <td>Title</td>
+                            <td>Desc</td>
+                            <td>Some</td>
+                        </tr>
+                        <tr>
+                            <td>123</td>
+                            <td>123</td>
+                            <td>123</td>
+                        </tr>
+                        <tr>
+                            <td>123</td>
+                            <td>123</td>
+                            <td>123</td>
+                        </tr>
+                    </table>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+    <script>
+
+        let sample = new Vue({
+            el: "#app",
+            data: {
+                divClass: "info",
+                checkboxFlags: {
+                    "table-bordered": false,
+                    "table-hover": true,
+                    "table-mystyle": false,
+                }
+            },
+            methods: {
+                addGuest() {
+
+                }
+            },
+            watch: {
+
+            },
+            computed: {
+                divClassName() {
+                    return ['alert-' + this.divClass, 'my-' + this.divClass];
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

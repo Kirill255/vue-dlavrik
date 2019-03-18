@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+	 crossorigin="anonymous">
+
+	<link href="style.css" rel="stylesheet">
+
+	<style>
+.content {
+    height: 300px;
+
+    overflow: auto;
+}
+
+	</style>
+
+</head>
+
+<body>
+	<div class="wrapper">
+		<div class="sample">
+			<form v-if="!sendData" @submit.prevent="sendData = true" id="form">
+				<div class="content alert alert-info" @scroll="onScroll">
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+					<p>This text no one reads. This text no one reads. This text no one reads.</p>
+				</div>
+				<template v-if="showOnScrollBottom">
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox" v-model="agree"> I agree this text
+						</label>
+					</div>
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="checkbox" v-model="spam"> Send me spam
+						</label>
+					</div>
+				</template>
+				<template v-if="spam">
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" value="email" v-model="spamOption"> Send me spam on email
+						</label>
+					</div>
+					<div class="form-check">
+						<label class="form-check-label">
+							<input class="form-check-input" type="radio" value="phone" v-model="spamOption"> Send me spam on phone
+						</label>
+					</div>
+				</template>
+				<hr>
+				<button type="submit" v-if="agree" class="btn btn-primary">
+					Send Data
+				</button>
+			</form>
+			<div v-if="sendData">
+				<table class="table table-bordered">
+					<tr>
+						<td>Agree Text</td>
+						<td>{{ agree ? "Yes" : "No" }}</td>
+					</tr>
+					<tr>
+						<td>Get Spam</td>
+						<td>{{ spam ? "Yes" : "No" }}</td>
+					</tr>
+					<tr v-if="spam">
+						<td>Spam On</td>
+						<td>{{ spamOption }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script>
+		// https://stackoverflow.com/questions/3962558/javascript-detect-scroll-end
+		// https://developer.mozilla.org/ru/docs/Web/API/Element/scrollHeight
+
+		new Vue({
+			el: '.sample',
+			data: {
+				showOnScrollBottom: false,
+				agree: false,
+				spam: false,
+				spamOption: "email",
+				sendData: false
+			},
+			computed: {
+
+			},
+			methods: {
+				onScroll(e) {
+					// const content = document.querySelector(".content");
+					// if (content.offsetHeight + content.scrollTop >= content.scrollHeight) {
+					// 	this.showOnScrollBottom = true;
+					// 	console.log('At the bottom');
+					// }
+
+					// или можно обратиться к объекту event в функции onScroll, который прилетает туда автоматом, или явно передан с помощью $event, а вернее так даже нужно делать, потому что мы работаем со Vue и тут есть свои способы достучаться до элемента с помощью например event.target или $refs, поэтому никаких document.querySelector тут не нужно
+
+					if (e.target.offsetHeight + e.target.scrollTop >= e.target.scrollHeight) {
+						this.showOnScrollBottom = true;
+						console.log('At the bottom');
+					} else {
+						// это чтобы чекбоксы снова пропадали, если поле прокручивается назад
+						// но это не нужно конечно, если пользователь хотя бы один раз промотал до конца, то он уже имеет право заполнять чекбоксы, и не нужно их убирать
+						// this.showOnScrollBottom = false;
+					}
+				}
+			},
+		});
+
+	</script>
+</body>
+
+</html>

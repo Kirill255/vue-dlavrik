@@ -1,0 +1,10 @@
+[v-cloak] {
+    display: none;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 15px;
+    max-width: 500px;
+}
+

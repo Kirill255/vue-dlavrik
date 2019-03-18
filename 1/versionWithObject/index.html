@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+        crossorigin="anonymous">
+
+    <link href="style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col col-sm-6">
+                    <form v-if="!result" @submit.prevent="sendData">
+                        <div class="form-group">
+                            <label for="email">Email address</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter email" v-model="email">
+                        </div>
+                        <div class="form-group">
+                            <label for="firstname">First name</label>
+                            <input type="text" class="form-control" id="firstname" placeholder="First name" v-model="firstname">
+                        </div>
+                        <div class="form-group">
+                            <label for="lastname">Last name</label>
+                            <input type="text" class="form-control" id="lastname" placeholder="Last name" v-model="lastname">
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone</label>
+                            <input type="text" class="form-control" id="phone" placeholder="Phone" v-model="phone">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="guestsBtn">Guests</label>
+                            <button type="button" id="guestsBtn" class="btn btn-primary" @click="addGuest">+</button>
+                        </div>
+
+                        <div class="form-group" v-for="(guest, key, index) in guests" :key="key">
+                            <label :for="'g' + index" @dblclick="removeGuest(key)">Guest {{ index +1 }}</label>
+                            <input type="text" class="form-control" :id="'g' + index" placeholder="Guest's name" v-model="guests[key]">
+                        </div>
+
+                        <hr>
+
+                        <button type="submit" class="btn btn-success">Send Data</button>
+                    </form>
+
+
+                    <div class="result" v-if="result">
+                        <h2>All done!</h2>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Key</th>
+                                    <th>Value</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>{{ email }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td>
+                                    <td>{{ fullname }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Phone</td>
+                                    <td>{{ phone }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Guests</td>
+                                    <td>
+                                        <ul class="list-group">
+                                            <li class="list-group-item" v-for="(guest, key, i) in guests">{{ guest }}</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+
+    <script>
+
+        let sample = new Vue({
+            el: "#app",
+            data: {
+                email: "",
+                firstname: "",
+                lastname: "",
+                phone: "",
+                guests: {},
+                guestIteranor: 0, // для ключей объекта guests, похоже на первичный ключ в бд
+                result: false
+            },
+            methods: {
+                addGuest() {
+                    this.guestIteranor++;
+                    // this.guests[this.guestIteranor] = ""; // просто записывает в наш объект guests по ключу guestIteranor значение "", но так не будет работать реактивность во Vue, для этого есть специальныйметод $set
+                    this.$set(this.guests, this.guestIteranor, "");
+                },
+                removeGuest(key) {
+                    // удаляем тоже с помощью встроенного во Vue метода $delete
+                    this.$delete(this.guests, key);
+                },
+                sendData() {
+                    this.result = !this.result;
+                }
+            },
+            watch: {
+
+            },
+            computed: {
+                fullname() {
+                    return this.firstname + " " + this.lastname;
+                }
+            }
+        });
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+[v-cloak] {
+    display: none;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 15px;
+    max-width: 500px;
+}
+
+.box {
+    width: 400px;
+    height: 100px;
+
+    background: #0ff;
+}
+
+.slide-fade-enter {
+    opacity: 0;
+
+    transform: scale(0, 1);
+}
+
+.slide-fade-enter-active {
+    transition: all 1s ease;
+}
+
+.slide-fade-leave-active {
+    transition: all 1s ease;
+}
+
+.slide-fade-leave-to {
+    opacity: 0;
+
+    transform: scale(0, 1);
+}
+
+/* formTr */
+
+.formTr-enter {
+    transform: translateX(-1000px);
+}
+
+.formTr-enter-active, .formTr-leave-active {
+    transition: all 0.5s ease;
+}
+
+.formTr-leave-to {
+    transform: translateX(1000px);
+}

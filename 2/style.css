@@ -1,0 +1,26 @@
+[v-cloak] {
+    display: none;
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 15px;
+    max-width: 500px;
+}
+
+/* .progress-bar {
+    transition: all 0.3s;
+} */
+
+.my-info {
+    font-size: 25px;
+}
+
+.my-warning {
+    font-style: italic;
+}
+
+.table-mystyle {
+    background: #000;
+    color: #fff;
+}

@@ -1,0 +1,18 @@
+/* На данный момент эти стили вынес в компоненты в scope css, в дальнейшем сдесь могут быть общие стили для всего приложения (например для body, html), также сюда можно засунуть normalize или reset стили */
+/* .wrapper {
+    margin: 0 auto;
+    padding: 15px;
+    max-width: 500px;
+}
+
+.formTr-enter {
+    transform: translateX(-1000px);
+}
+
+.formTr-enter-active, .formTr-leave-active {
+    transition: all 0.5s ease;
+}
+
+.formTr-leave-to {
+    transform: translateX(1000px);
+} */

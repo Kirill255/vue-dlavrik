@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>1</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB"
+	 crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt"
+	 crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+
+	<link href="style.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+
+	<div class="wrapper">
+		<div class="sample" v-cloak>
+			<transition name="formTr" mode="out-in" appear>
+				<form v-if="!result" @submit.prevent="result = true">
+
+					<div class="progress">
+						<div class="progress-bar" :style="widthBar"></div>
+					</div>
+
+					<app-input v-for="(field, i) in info" :key="i" :name="field.name" :value.sync="field.value" :pattern="field.pattern" :index="i"
+					 @change-value="onChangeValue(i, $event)">
+					</app-input>
+
+					<button :disabled="canSend" class="btn btn-primary" :class="canSendClass">
+						Send Data
+					</button>
+				</form>
+				<div v-if="result">
+					<table class="table table-bordered">
+						<tr v-for="field in info">
+							<td>{{ field.name }}</td>
+							<td>{{ field.value }}</td>
+						</tr>
+					</table>
+				</div>
+			</transition>
+		</div>
+	</div>
+
+
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<script>
+
+		// =============== "Компонент" ========================
+
+		Vue.component('app-input', {
+			props: ['name', 'value', 'pattern', 'index'],
+			template: `
+				<div>
+					<div class="form-group">
+						<label>{{ name }}
+							<i v-if="activated" class="fas" :class="validClass"></i>
+						</label>
+						<input type="text" class="form-control" :value="value" @input="onInput">
+					</div>
+				</div>
+			`,
+			data() {
+				return {
+					activated: this.value !== ""
+				}
+			},
+			computed: {
+				isValid() {
+					return this.pattern.test(this.value);
+				},
+				// validClass() {
+				// 	return this.isValid ? 'fa-check-circle text-success' : 'fa-exclamation-circle text-danger';
+				// },
+				validClass() {
+					return this.isValid ? 'fa-check-circle text-success animated bounce' : 'fa-exclamation-circle text-danger animated shake';
+				}
+			},
+			methods: {
+				onInput(e) {
+					this.activated = true;
+					this.$emit("update:value", e.target.value);
+				},
+			},
+			watch: {
+				isValid() {
+					// если нужно мы могли бы передать и наше событие `e`, this.$emit("change-value", e)
+					this.$emit("change-value", this.isValid);
+				}
+			}
+		});
+
+		// =============== "Экземпляр Vue" ========================
+
+		new Vue({
+			el: '.sample',
+			data: {
+				// name: "",
+				// phone: "",
+				// email: "",
+				// some1: "",
+				// some2: "",
+				result: false,
+				done: 0,
+				info: [
+					{
+						name: 'Name',
+						value: '',
+						pattern: /^[a-zA-Z ]{2,30}$/
+					},
+					{
+						name: 'Phone',
+						value: '',
+						pattern: /^[0-9]{7,14}$/
+					},
+					{
+						name: 'Email',
+						value: 'some@mail.ru',
+						pattern: /.+@.+/
+					},
+					{
+						name: 'Some Field 1',
+						value: '',
+						pattern: /.+/
+					},
+					{
+						name: 'Some Field 2',
+						value: '',
+						pattern: /.+/
+					}
+				]
+			},
+			methods: {
+				// да! в шаблоне мы передали $event `@change-value="onChangeValue(i, $event)"`, но в нашем случае эта переменная будет переопределяться нашим аргументом который мы передали, а передали мы status (isValid - тоесть или true или false), мы так же могли вместо аргумента передать туда наше событие `e`, и тогда в переменной $target было бы оно
+				onChangeValue(i, status) {
+					console.log("val ", status);
+					// при изменении статуса у поля, мы меняем done
+					// если валид то +1, если невалид то -1
+					this.done += status ? 1 : -1;
+				}
+			},
+			computed: {
+				widthBar() {
+					return {
+						width: (this.done / this.info.length * 100) + "%"
+					}
+				},
+				canSend() {
+					return this.done !== this.info.length;
+				},
+				canSendClass() {
+					return this.canSend ? "" : "animated bounceIn";
+				}
+			},
+			created() {
+				// решили избавиться от массива controls полностью
+				// при создании высчитываем кол-во валидных полей
+				// если валид то +1, если невалид то не меняем ну или просто +0 =)
+				for (let i = 0; i < this.info.length; i++) {
+					this.done += this.info[i].pattern.test(this.info[i].value) ? 1 : 0;
+				}
+				console.log('done :', this.done);
+			}
+		});
+
+	</script>
+</body>
+
+</html>
